@@ -1,0 +1,36 @@
+#!/bin/bash 
+PATH_PROJECT=$(pwd)
+
+# pubspec path
+PUBSPEC_FILE_PATH=$PATH_PROJECT/pubspec.yaml
+
+# android paths
+ANDROID_PATH=$PATH_PROJECT/android
+ANDROID_APP_GRADLE_FILE_PATH=$ANDROID_PATH/app/build.gradle
+ANDROID_MAIN_ACTIVITY_FILE_PATH=$ANDROID_PATH/app/src/main/kotlin/com/toolagen/flutter_boilerplate_project/MainActivity.kt
+ANDROID_MANIFEST_FILE_PATH=$ANDROID_PATH/app/src/main/AndroidManifest.xml
+
+# ios paths
+IOS_PATH=$PATH_PROJECT/ios
+IOS_INFO_FILE_PATH=$IOS_PATH/Runner/Info.plist
+
+OLD_PROJECT_NAME=tasko
+NEW_PROJECT_NAME=flutter_boilerplate_project
+
+vim -esnc "%s/$OLD_PROJECT_NAME/$NEW_PROJECT_NAME/g|:wq" $PUBSPEC_FILE_PATH
+
+vim -esnc "%s/$OLD_PROJECT_NAME/$NEW_PROJECT_NAME/g|:wq" $ANDROID_APP_GRADLE_FILE_PATH
+
+vim -esnc "%s/$OLD_PROJECT_NAME/$NEW_PROJECT_NAME/g|:wq" $ANDROID_MAIN_ACTIVITY_FILE_PATH
+
+vim -esnc "%s/$OLD_PROJECT_NAME/$NEW_PROJECT_NAME/g|:wq" $ANDROID_MANIFEST_FILE_PATH
+
+vim -esnc "%s/$OLD_PROJECT_NAME/$NEW_PROJECT_NAME/g|:wq" $IOS_INFO_FILE_PATH
+
+echo $PUBSPEC_FILE_PATH
+echo $ANDROID_APP_GRADLE_FILE_PATH
+echo $ANDROID_MAIN_ACTIVITY_FILE_PATH
+echo $ANDROID_MANIFEST_FILE_PATH
+echo $IOS_INFO_FILE_PATH
+
+exit
