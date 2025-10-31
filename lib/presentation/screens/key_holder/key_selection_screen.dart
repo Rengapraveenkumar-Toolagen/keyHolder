@@ -1,7 +1,4 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_boilerplate_project/presentation/screens/key_holder/data.dart';
 import 'package:flutter_boilerplate_project/presentation/screens/key_holder/home_screen.dart';
 import 'package:flutter_boilerplate_project/presentation/screens/key_holder/key_model.dart';
@@ -18,34 +15,33 @@ class _KeySelectionScreenState extends State<KeySelectionScreen> {
   final String defaultImgUrl =
       "https://docs.flutter.dev/assets/images/shared/brand/flutter/logo/flutter-lockup-color.png";
 
-  late Future<List<Map<String, dynamic>>> _futureKeys;
+  late Future<List<KeyModel>> _futureKeys;
+  List<KeyModel> _keys = [];
+  int? _selectedIndex;
 
   @override
   void initState() {
     super.initState();
     _futureKeys = _getKeys();
+    _futureKeys.then((value) {
+      if (mounted) {
+        setState(() {
+          _keys = value;
+        });
+      }
+    });
   }
 
-  // Future<List<Map<String, dynamic>>> _getKeys() async {
-  //   await Future.delayed(const Duration(seconds: 2));
-  //   final String response =
-  //       await rootBundle.loadString('assets/data/keys.json');
-  //   final parsedList = jsonDecode(response);
-  //   final keys = parsedList.map((item) => KeyModel.fromJson(item)).toList();
-
-  //   return keys;
-  // }
-
-  Future<List<Map<String, dynamic>>> _getKeys() async {
+  Future<List<KeyModel>> _getKeys() async {
     await Future.delayed(const Duration(seconds: 2));
-    return mockedData;
+    return mockedData.map((item) => KeyModel.fromJson(item)).toList();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Key Selection"),
+        title: const Text("Key Selection"),
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -54,19 +50,23 @@ class _KeySelectionScreenState extends State<KeySelectionScreen> {
           child: ElevatedButton(
               style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue, foregroundColor: Colors.white),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (BuildContext context) =>
-                        const KeyHolderHomeScreen(),
-                  ),
-                );
-              },
-              child: Text("Next")),
+              onPressed: _selectedIndex == null
+                  ? null
+                  : () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (BuildContext context) =>
+                              KeyHolderHomeScreen(
+                                  // keyModel: _keys[_selectedIndex!],
+                                  ),
+                        ),
+                      );
+                    },
+              child: const Text("Next")),
         ),
       ),
-      body: FutureBuilder<List<Map<String, dynamic>>>(
+      body: FutureBuilder<List<KeyModel>>(
         future: _futureKeys,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -102,9 +102,14 @@ class _KeySelectionScreenState extends State<KeySelectionScreen> {
               itemBuilder: (context, index) {
                 final key = keys[index];
                 return ListTile(
+                  onTap: () {
+                    setState(() {
+                      _selectedIndex = index;
+                    });
+                  },
                   leading: ClipOval(
                     child: Image.network(
-                      key['imgUrl'] as String,
+                      key.imgUrl,
                       fit: BoxFit.cover,
                       width: 50,
                       height: 50,
@@ -117,7 +122,16 @@ class _KeySelectionScreenState extends State<KeySelectionScreen> {
                       ),
                     ),
                   ),
-                  title: Text(key['name'] as String),
+                  title: Text(key.name),
+                  trailing: Radio<int>(
+                    value: index,
+                    groupValue: _selectedIndex,
+                    onChanged: (int? value) {
+                      setState(() {
+                        _selectedIndex = value;
+                      });
+                    },
+                  ),
                 );
               },
             );
