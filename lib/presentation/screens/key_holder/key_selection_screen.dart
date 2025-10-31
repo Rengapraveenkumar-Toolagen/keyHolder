@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_boilerplate_project/presentation/screens/key_holder/data.dart';
 import 'package:flutter_boilerplate_project/presentation/screens/key_holder/home_screen.dart';
+import 'package:flutter_boilerplate_project/presentation/screens/key_holder/key_model.dart';
 import 'package:shimmer/shimmer.dart';
 
 class KeySelectionScreen extends StatefulWidget {
@@ -22,15 +26,19 @@ class _KeySelectionScreenState extends State<KeySelectionScreen> {
     _futureKeys = _getKeys();
   }
 
+  // Future<List<Map<String, dynamic>>> _getKeys() async {
+  //   await Future.delayed(const Duration(seconds: 2));
+  //   final String response =
+  //       await rootBundle.loadString('assets/data/keys.json');
+  //   final parsedList = jsonDecode(response);
+  //   final keys = parsedList.map((item) => KeyModel.fromJson(item)).toList();
+
+  //   return keys;
+  // }
+
   Future<List<Map<String, dynamic>>> _getKeys() async {
     await Future.delayed(const Duration(seconds: 2));
     return mockedData;
-  }
-
-  Future<void> _refreshData() async {
-    setState(() {
-      _futureKeys = _getKeys();
-    });
   }
 
   @override
