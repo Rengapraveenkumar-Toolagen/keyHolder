@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
 
 class KeyHolderHomeScreen extends StatefulWidget {
   const KeyHolderHomeScreen({super.key});
@@ -12,39 +13,41 @@ class _KeyHolderHomeScreenState extends State<KeyHolderHomeScreen> {
     {
       "id": 1,
       "name": "Home Keys",
-      "imgUrl": "https://via.placeholder.com/150/FF0000/FFFFFF?Text=Home"
+      "imgUrl": "https://picsum.photos/id/1/200/300"
     },
     {
       "id": 2,
       "name": "Office Keys",
-      "imgUrl": "https://via.placeholder.com/150/00FF00/FFFFFF?Text=Office"
+      "imgUrl": "https://picsum.photos/id/2/200/300"
     },
     {
       "id": 3,
       "name": "Car Keys",
-      "imgUrl": "https://via.placeholder.com/150/0000FF/FFFFFF?Text=Car"
+      "imgUrl": "https://picsum.photos/id/3/200/300"
     },
     {
       "id": 4,
       "name": "Shed Keys",
-      "imgUrl": "https://via.placeholder.com/150/FFFF00/000000?Text=Shed"
+      "imgUrl": "https://picsum.photos/id/4/200/300"
     },
     {
       "id": 5,
       "name": "Mailbox Keys",
-      "imgUrl": "https://via.placeholder.com/150/00FFFF/000000?Text=Mail"
+      "imgUrl": "https://picsum.photos/id/5/200/300"
     },
     {
       "id": 6,
       "name": "Safe Keys",
-      "imgUrl": "https://via.placeholder.com/150/FF00FF/FFFFFF?Text=Safe"
+      "imgUrl": "https://picsum.photos/id/6/200/300"
     },
     {
       "id": 7,
       "name": "Storage Keys",
-      "imgUrl": "https://via.placeholder.com/150/C0C0C0/000000?Text=Storage"
+      "imgUrl": "https://picsum.photos/id/7/200/300"
     }
   ];
+  final String defaultImgUrl =
+      "https://png.pngtree.com/png-vector/20190508/ourmid/pngtree-key-vector-icon-png-image_1027880.jpg";
 
   Future<List<Map<String, dynamic>>> _getKeys() async {
     await Future.delayed(const Duration(seconds: 2));
@@ -54,36 +57,86 @@ class _KeyHolderHomeScreenState extends State<KeyHolderHomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder<List<Map<String, dynamic>>>(
-        future: _getKeys(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return const Center(child: Text('Error fetching data'));
-          } else if (snapshot.hasData) {
-            final keys = snapshot.data!;
-            return ListView.builder(
-              itemCount: keys.length,
-              itemBuilder: (context, index) {
-                final key = keys[index];
-                return ListTile(
-                  leading: Image.network(key['imgUrl'] as String),
-                  title: Text(key['name'] as String),
-                );
+      body: Column(
+        spacing: 20,
+        children: [
+          Text("Keys"),
+          Expanded(
+            child: FutureBuilder<List<Map<String, dynamic>>>(
+              future: _getKeys(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Shimmer.fromColors(
+                    baseColor: Colors.grey[300]!,
+                    highlightColor: Colors.grey[100]!,
+                    child: ListView.builder(
+                      itemCount: 7,
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                          leading: CircleAvatar(
+                            radius: 25.0,
+                            backgroundColor: Colors.white,
+                          ),
+                          title: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Container(
+                              width: MediaQuery.of(context).size.width * 0.6,
+                              height: 16.0,
+                              color: Colors.white,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                } else if (snapshot.hasError) {
+                  return const Center(child: Text('Error fetching data'));
+                } else if (snapshot.hasData) {
+                  final keys = snapshot.data!;
+                  return ListView.builder(
+                    itemCount: keys.length,
+                    itemBuilder: (context, index) {
+                      final key = keys[index];
+                      return ListTile(
+                        leading: ClipOval(
+                          child: Image.network(
+                            key['imgUrl'] as String,
+                            fit: BoxFit.cover,
+                            width: 50,
+                            height: 50,
+                            errorBuilder: (context, error, stackTrace) =>
+                                ClipOval(
+                              child: Image.network(
+                                defaultImgUrl,
+                                fit: BoxFit.cover,
+                                width: 50,
+                                height: 50,
+                              ),
+                            ),
+                          ),
+                        ),
+                        title: Text(key['name'] as String),
+                      );
+                    },
+                  );
+                } else {
+                  return const Center(child: Text('No data'));
+                }
               },
-            );
-          } else {
-            return const Center(child: Text('No data'));
-          }
-        },
+            ),
+          ),
+        ],
       ),
       floatingActionButton: SizedBox(
         width: 100,
         height: 100,
-        child: FloatingActionButton(
-          onPressed: () {},
-          child: const Text('SOS', style: TextStyle(fontSize: 24)),
+        child: ClipOval(
+          child: FloatingActionButton(
+            backgroundColor: Colors.red,
+            onPressed: () {},
+            child: const Text('SOS',
+                style: TextStyle(fontSize: 24, color: Colors.white)),
+          ),
         ),
       ),
     );
