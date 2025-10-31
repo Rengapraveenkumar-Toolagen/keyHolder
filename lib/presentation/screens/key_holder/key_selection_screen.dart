@@ -39,78 +39,84 @@ class _KeySelectionScreenState extends State<KeySelectionScreen> {
       appBar: AppBar(
         title: Text("Key Selection"),
       ),
-      floatingActionButton: ElevatedButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (BuildContext context) => const KeyHolderHomeScreen(),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: SizedBox(
+          width: double.infinity,
+          child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue, foregroundColor: Colors.white),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) =>
+                        const KeyHolderHomeScreen(),
+                  ),
+                );
+              },
+              child: Text("Next")),
+        ),
+      ),
+      body: FutureBuilder<List<Map<String, dynamic>>>(
+        future: _futureKeys,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Shimmer.fromColors(
+              baseColor: Colors.grey[300]!,
+              highlightColor: Colors.grey[100]!,
+              child: ListView.builder(
+                itemCount: 7,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    leading: const CircleAvatar(
+                      radius: 25.0,
+                      backgroundColor: Colors.white,
+                    ),
+                    title: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Container(
+                        width: MediaQuery.of(context).size.width * 0.6,
+                        height: 16.0,
+                        color: Colors.white,
+                      ),
+                    ),
+                  );
+                },
               ),
             );
-          },
-          child: Text("Next")),
-      body: RefreshIndicator(
-        onRefresh: _refreshData,
-        child: FutureBuilder<List<Map<String, dynamic>>>(
-          future: _futureKeys,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Shimmer.fromColors(
-                baseColor: Colors.grey[300]!,
-                highlightColor: Colors.grey[100]!,
-                child: ListView.builder(
-                  itemCount: 7,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      leading: const CircleAvatar(
-                        radius: 25.0,
-                        backgroundColor: Colors.white,
-                      ),
-                      title: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Container(
-                          width: MediaQuery.of(context).size.width * 0.6,
-                          height: 16.0,
-                          color: Colors.white,
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              );
-            } else if (snapshot.hasError) {
-              return Center(child: Text('Error: ${snapshot.error}'));
-            } else if (snapshot.hasData) {
-              final keys = snapshot.data!;
-              return ListView.builder(
-                itemCount: keys.length,
-                itemBuilder: (context, index) {
-                  final key = keys[index];
-                  return ListTile(
-                    leading: ClipOval(
-                      child: Image.network(
-                        key['imgUrl'] as String,
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (snapshot.hasData) {
+            final keys = snapshot.data!;
+            return ListView.builder(
+              itemCount: keys.length,
+              itemBuilder: (context, index) {
+                final key = keys[index];
+                return ListTile(
+                  leading: ClipOval(
+                    child: Image.network(
+                      key['imgUrl'] as String,
+                      fit: BoxFit.cover,
+                      width: 50,
+                      height: 50,
+                      errorBuilder: (context, error, stackTrace) =>
+                          Image.network(
+                        defaultImgUrl,
                         fit: BoxFit.cover,
                         width: 50,
                         height: 50,
-                        errorBuilder: (context, error, stackTrace) =>
-                            Image.network(
-                          defaultImgUrl,
-                          fit: BoxFit.cover,
-                          width: 50,
-                          height: 50,
-                        ),
                       ),
                     ),
-                    title: Text(key['name'] as String),
-                  );
-                },
-              );
-            } else {
-              return const Center(child: Text('No data'));
-            }
-          },
-        ),
+                  ),
+                  title: Text(key['name'] as String),
+                );
+              },
+            );
+          } else {
+            return const Center(child: Text('No data'));
+          }
+        },
       ),
     );
   }
