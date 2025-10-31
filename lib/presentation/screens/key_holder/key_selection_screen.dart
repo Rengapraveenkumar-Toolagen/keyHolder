@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_boilerplate_project/presentation/screens/key_holder/data.dart';
-import 'package:flutter_boilerplate_project/presentation/screens/key_holder/key_selection_screen.dart';
+import 'package:flutter_boilerplate_project/presentation/screens/key_holder/home_screen.dart';
 import 'package:shimmer/shimmer.dart';
 
-class KeyHolderHomeScreen extends StatefulWidget {
-  const KeyHolderHomeScreen({super.key});
+class KeySelectionScreen extends StatefulWidget {
+  const KeySelectionScreen({super.key});
 
   @override
-  State<KeyHolderHomeScreen> createState() => _KeyHolderHomeScreenState();
+  State<KeySelectionScreen> createState() => _KeySelectionScreenState();
 }
 
-class _KeyHolderHomeScreenState extends State<KeyHolderHomeScreen> {
+class _KeySelectionScreenState extends State<KeySelectionScreen> {
   final String defaultImgUrl =
       "https://docs.flutter.dev/assets/images/shared/brand/flutter/logo/flutter-lockup-color.png";
 
@@ -37,8 +37,18 @@ class _KeyHolderHomeScreenState extends State<KeyHolderHomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Keys"),
+        title: Text("Key Selection"),
       ),
+      floatingActionButton: ElevatedButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (BuildContext context) => const KeyHolderHomeScreen(),
+              ),
+            );
+          },
+          child: Text("Next")),
       body: RefreshIndicator(
         onRefresh: _refreshData,
         child: FutureBuilder<List<Map<String, dynamic>>>(
@@ -100,25 +110,6 @@ class _KeyHolderHomeScreenState extends State<KeyHolderHomeScreen> {
               return const Center(child: Text('No data'));
             }
           },
-        ),
-      ),
-      floatingActionButton: SizedBox(
-        width: 100,
-        height: 100,
-        child: ClipOval(
-          child: FloatingActionButton(
-            backgroundColor: Colors.red,
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (BuildContext context) => const KeySelectionScreen(),
-                ),
-              );
-            },
-            child: const Text('SOS',
-                style: TextStyle(fontSize: 24, color: Colors.white)),
-          ),
         ),
       ),
     );
