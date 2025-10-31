@@ -20,4 +20,5 @@ class PageName {
   static const String projectTaskListScreen = '/projectTaskListScreen';
   static const String keyHolderHomeScreen = '/keyHolderHomeScreen';
   static const String addressScreen = '/addressScreen';
+  static const String deliverCodeScreen = '/deliverCodeScreen';
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_boilerplate_project/presentation/routes/pages_name.dart';
 import 'package:flutter_boilerplate_project/presentation/screens/key_holder/key_model.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geocoding/geocoding.dart';
@@ -113,10 +114,17 @@ class _AddressScreenState extends State<AddressScreen> {
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blue,
                         foregroundColor: Colors.white),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pushReplacementNamed(
+                          context, PageName.deliverCodeScreen);
+                    },
                     child: Text("Deliver Here"))),
           ),
-          TextButton(onPressed: () {}, child: Text("Cancel"))
+          TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text("Cancel"))
         ],
       ),
       body: Padding(
