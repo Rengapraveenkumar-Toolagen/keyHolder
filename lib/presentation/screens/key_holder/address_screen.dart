@@ -99,7 +99,25 @@ class _AddressScreenState extends State<AddressScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Address"),
+        title: const Text("Deliver Location"),
+      ),
+      bottomNavigationBar: Column(
+        mainAxisSize: MainAxisSize.min,
+        spacing: 10,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue,
+                        foregroundColor: Colors.white),
+                    onPressed: () {},
+                    child: Text("Deliver Here"))),
+          ),
+          TextButton(onPressed: () {}, child: Text("Cancel"))
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -134,48 +152,118 @@ class _AddressScreenState extends State<AddressScreen> {
       return const Center(child: Text("Could not get location."));
     }
 
-    return Column(
-      children: [
-        Expanded(
-          child: FlutterMap(
-            options: MapOptions(
-              initialCenter: LatLng(
-                _currentPosition!.latitude,
-                _currentPosition!.longitude,
-              ),
-              initialZoom: 16.0,
-            ),
-            children: [
-              TileLayer(
-                urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-              ),
-              MarkerLayer(
-                markers: [
-                  Marker(
-                    width: 80.0,
-                    height: 80.0,
-                    point: LatLng(
-                      _currentPosition!.latitude,
-                      _currentPosition!.longitude,
-                    ),
-                    child: const Icon(
-                      Icons.location_on,
-                      color: Colors.red,
-                      size: 40.0,
-                    ),
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          SizedBox(
+            height: 300,
+            child: ClipRRect(
+              borderRadius: BorderRadiusGeometry.circular(20),
+              child: FlutterMap(
+                options: MapOptions(
+                  initialCenter: LatLng(
+                    _currentPosition!.latitude,
+                    _currentPosition!.longitude,
+                  ),
+                  initialZoom: 15.0,
+                ),
+                children: [
+                  TileLayer(
+                    urlTemplate:
+                        'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                    subdomains: ['a', 'b', 'c'],
+                  ),
+                  MarkerLayer(
+                    markers: [
+                      Marker(
+                        width: 80.0,
+                        height: 80.0,
+                        point: LatLng(
+                          _currentPosition!.latitude,
+                          _currentPosition!.longitude,
+                        ),
+                        child: const Icon(
+                          Icons.location_on,
+                          color: Colors.blue,
+                          size: 40.0,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
+            ),
+          ),
+          // const SizedBox(height: 16),
+          if (_currentAddress != null)
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 26),
+                Text(
+                  "Currect Location",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 16),
+                locationListWidget(
+                    icon: Icons.abc,
+                    title: _currentAddress ?? '',
+                    subTitle: '',
+                    isSelected: true),
+              ],
+            ),
+          const SizedBox(height: 26),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Saved Address",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              locationListWidget(
+                  icon: Icons.home,
+                  title: "43/1, North kotai street,",
+                  subTitle: "Periyarnilayam, Madurai.",
+                  isSelected: false),
+              locationListWidget(
+                  icon: Icons.home,
+                  title: "43/1, North kotai street,",
+                  subTitle: "Periyarnilayam, Madurai.",
+                  isSelected: false),
             ],
           ),
-        ),
-        const SizedBox(height: 16),
-        if (_currentAddress != null)
-          Text(
-            "Address: $_currentAddress",
-            style: const TextStyle(fontSize: 16),
+        ],
+      ),
+    );
+  }
+
+  Widget locationListWidget(
+      {required IconData icon,
+      required String title,
+      required String subTitle,
+      bool isSelected = false}) {
+    return Container(
+      decoration: isSelected
+          ? BoxDecoration(
+              border: Border.all(color: Colors.blue, width: 1),
+              borderRadius: BorderRadius.circular(20))
+          : null,
+      child: ListTile(
+        leading: ClipRRect(
+          borderRadius: BorderRadiusGeometry.circular(15),
+          child: Container(
+            color: Colors.blue,
+            padding: EdgeInsets.all(10),
+            child: Icon(
+              icon,
+              color: Colors.white,
+            ),
           ),
-      ],
+        ),
+        title: Text(title),
+        subtitle: Text(subTitle),
+        trailing: Icon(Icons.abc),
+      ),
     );
   }
 }
