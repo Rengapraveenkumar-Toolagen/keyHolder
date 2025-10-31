@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_boilerplate_project/presentation/screens/key_holder/address_screen.dart';
 import 'package:flutter_boilerplate_project/presentation/screens/key_holder/data.dart';
-import 'package:flutter_boilerplate_project/presentation/screens/key_holder/home_screen.dart';
 import 'package:flutter_boilerplate_project/presentation/screens/key_holder/key_model.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -56,10 +56,9 @@ class _KeySelectionScreenState extends State<KeySelectionScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (BuildContext context) =>
-                              KeyHolderHomeScreen(
-                                  // keyModel: _keys[_selectedIndex!],
-                                  ),
+                          builder: (BuildContext context) => AddressScreen(
+                            selectedKey: _keys[_selectedIndex!],
+                          ),
                         ),
                       );
                     },

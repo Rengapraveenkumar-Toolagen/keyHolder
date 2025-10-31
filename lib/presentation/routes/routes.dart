@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_boilerplate_project/presentation/screens/key_holder/address_screen.dart';
 import 'package:flutter_boilerplate_project/presentation/screens/key_holder/home_screen.dart';
+import 'package:flutter_boilerplate_project/presentation/screens/key_holder/key_model.dart';
 
 import '../../data/model/project_details.dart';
 import '../../data/model/subtask.dart';
@@ -71,6 +73,13 @@ class AppRouter {
             UpdateSubtaskScreen(subtasks: arg is SubTasks ? arg : null));
       case PageName.keyHolderHomeScreen:
         return _buildMaterialPageRoute(settings, const KeyHolderHomeScreen());
+      case PageName.addressScreen:
+        var arg = settings.arguments;
+        return _buildMaterialPageRoute(
+            settings,
+            AddressScreen(
+              selectedKey: arg as KeyModel,
+            ));
       default:
         return _buildMaterialPageRoute(settings, const ErrorScreen());
     }
