@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:524402470917:android:d1ce32efe3c20124fb2c6c",
+        "mobilesdk_app_id": "1:524402470917:android:87963770147734a5fb2c6c",
         "android_client_info": {
-          "package_name": "com.toolagen.keyholder"
+          "package_name": "com.toolagen.keyholder.dev"
         }
       },
       "oauth_client": [],
