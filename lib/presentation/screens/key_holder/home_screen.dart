@@ -57,75 +57,72 @@ class _KeyHolderHomeScreenState extends State<KeyHolderHomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        spacing: 20,
-        children: [
-          Text("Keys"),
-          Expanded(
-            child: FutureBuilder<List<Map<String, dynamic>>>(
-              future: _getKeys(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Shimmer.fromColors(
-                    baseColor: Colors.grey[300]!,
-                    highlightColor: Colors.grey[100]!,
-                    child: ListView.builder(
-                      itemCount: 7,
-                      itemBuilder: (context, index) {
-                        return ListTile(
-                          leading: CircleAvatar(
-                            radius: 25.0,
-                            backgroundColor: Colors.white,
-                          ),
-                          title: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Container(
-                              width: MediaQuery.of(context).size.width * 0.6,
-                              height: 16.0,
-                              color: Colors.white,
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  );
-                } else if (snapshot.hasError) {
-                  return const Center(child: Text('Error fetching data'));
-                } else if (snapshot.hasData) {
-                  final keys = snapshot.data!;
-                  return ListView.builder(
-                    itemCount: keys.length,
-                    itemBuilder: (context, index) {
-                      final key = keys[index];
-                      return ListTile(
-                        leading: ClipOval(
+      appBar: AppBar(
+        title: Text("Keys"),
+      ),
+      body: RefreshIndicator(
+        onRefresh: _getKeys,
+        child: FutureBuilder<List<Map<String, dynamic>>>(
+          future: _getKeys(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Shimmer.fromColors(
+                baseColor: Colors.grey[300]!,
+                highlightColor: Colors.grey[100]!,
+                child: ListView.builder(
+                  itemCount: 7,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      leading: CircleAvatar(
+                        radius: 25.0,
+                        backgroundColor: Colors.white,
+                      ),
+                      title: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Container(
+                          width: MediaQuery.of(context).size.width * 0.6,
+                          height: 16.0,
+                          color: Colors.white,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              );
+            } else if (snapshot.hasError) {
+              return const Center(child: Text('Error fetching data'));
+            } else if (snapshot.hasData) {
+              final keys = snapshot.data!;
+              return ListView.builder(
+                itemCount: keys.length,
+                itemBuilder: (context, index) {
+                  final key = keys[index];
+                  return ListTile(
+                    leading: ClipOval(
+                      child: Image.network(
+                        key['imgUrl'] as String,
+                        fit: BoxFit.cover,
+                        width: 50,
+                        height: 50,
+                        errorBuilder: (context, error, stackTrace) => ClipOval(
                           child: Image.network(
-                            key['imgUrl'] as String,
+                            defaultImgUrl,
                             fit: BoxFit.cover,
                             width: 50,
                             height: 50,
-                            errorBuilder: (context, error, stackTrace) =>
-                                ClipOval(
-                              child: Image.network(
-                                defaultImgUrl,
-                                fit: BoxFit.cover,
-                                width: 50,
-                                height: 50,
-                              ),
-                            ),
                           ),
                         ),
-                        title: Text(key['name'] as String),
-                      );
-                    },
+                      ),
+                    ),
+                    title: Text(key['name'] as String),
                   );
-                } else {
-                  return const Center(child: Text('No data'));
-                }
-              },
-            ),
-          ),
-        ],
+                },
+              );
+            } else {
+              return const Center(child: Text('No data'));
+            }
+          },
+        ),
       ),
       floatingActionButton: SizedBox(
         width: 100,
