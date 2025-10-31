@@ -47,23 +47,37 @@ class _KeyHolderHomeScreenState extends State<KeyHolderHomeScreen> {
     }
   ];
   final String defaultImgUrl =
-      "https://png.pngtree.com/png-vector/20190508/ourmid/pngtree-key-vector-icon-png-image_1027880.jpg";
+      "https://docs.flutter.dev/assets/images/shared/brand/flutter/logo/flutter-lockup-color.png";
+
+  late Future<List<Map<String, dynamic>>> _futureKeys;
+
+  @override
+  void initState() {
+    super.initState();
+    _futureKeys = _getKeys();
+  }
 
   Future<List<Map<String, dynamic>>> _getKeys() async {
     await Future.delayed(const Duration(seconds: 2));
     return mockedData;
   }
 
+  Future<void> _refreshData() async {
+    setState(() {
+      _futureKeys = _getKeys();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Keys"),
+        title: const Text("Keys"),
       ),
       body: RefreshIndicator(
-        onRefresh: _getKeys,
+        onRefresh: _refreshData,
         child: FutureBuilder<List<Map<String, dynamic>>>(
-          future: _getKeys(),
+          future: _futureKeys,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Shimmer.fromColors(
@@ -73,7 +87,7 @@ class _KeyHolderHomeScreenState extends State<KeyHolderHomeScreen> {
                   itemCount: 7,
                   itemBuilder: (context, index) {
                     return ListTile(
-                      leading: CircleAvatar(
+                      leading: const CircleAvatar(
                         radius: 25.0,
                         backgroundColor: Colors.white,
                       ),
@@ -90,7 +104,7 @@ class _KeyHolderHomeScreenState extends State<KeyHolderHomeScreen> {
                 ),
               );
             } else if (snapshot.hasError) {
-              return const Center(child: Text('Error fetching data'));
+              return Center(child: Text('Error: ${snapshot.error}'));
             } else if (snapshot.hasData) {
               final keys = snapshot.data!;
               return ListView.builder(
@@ -104,13 +118,12 @@ class _KeyHolderHomeScreenState extends State<KeyHolderHomeScreen> {
                         fit: BoxFit.cover,
                         width: 50,
                         height: 50,
-                        errorBuilder: (context, error, stackTrace) => ClipOval(
-                          child: Image.network(
-                            defaultImgUrl,
-                            fit: BoxFit.cover,
-                            width: 50,
-                            height: 50,
-                          ),
+                        errorBuilder: (context, error, stackTrace) =>
+                            Image.network(
+                          defaultImgUrl,
+                          fit: BoxFit.cover,
+                          width: 50,
+                          height: 50,
                         ),
                       ),
                     ),
