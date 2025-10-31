@@ -18,4 +18,5 @@ class PageName {
   static const String languageScreen = '/languageScreen';
   static const String updateSubTaskScreen = '/updateSubTaskScreen';
   static const String projectTaskListScreen = '/projectTaskListScreen';
+  static const String keyHolderHomeScreen = '/keyHolderHomeScreen';
 }

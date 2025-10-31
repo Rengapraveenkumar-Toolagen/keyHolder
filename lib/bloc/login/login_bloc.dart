@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_boilerplate_project/data/model/user_detail.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../data/model/token_access.dart';
@@ -29,8 +30,28 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
           //var fcmToken = await firebaseMessaging.getToken();
 
-          TokenAccess user = await loginRepo
-              .getAccessToken(FirebaseAuth.instance.currentUser!.uid);
+          // Mocked user detail
+          final mockUser = UserDetail(
+            'u12345',
+            'john_doe',
+            'john.doe@example.com',
+            '+15551234567',
+            false, // isAdmin
+            true, // pushNotification
+            false, // emailNotification
+            isSelected: true,
+          );
+
+          // Mocked token access
+          final mockTokenAccess = TokenAccess(
+              true,
+              'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.mockAccessToken123',
+              'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.mockRefreshToken456',
+              mockUser);
+
+          // TokenAccess user = await loginRepo
+          //     .getAccessToken(FirebaseAuth.instance.currentUser!.uid);
+          TokenAccess user = mockTokenAccess;
           var authToken = user.accessToken;
           var refreshToken = user.refreshToken;
           await prefs.setString('accessToken', authToken!);

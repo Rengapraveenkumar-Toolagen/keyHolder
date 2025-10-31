@@ -65,9 +65,13 @@ class _LoginScreenState extends State<LoginScreen> {
                 // Navigator.pushReplacementNamed(
                 //     context, PageName.emailOTPVerificationScreen,
                 //     arguments: state.userDetails.userDetail);
+
+                // Navigator.pushReplacementNamed(
+                //     context, PageName.dashBoardScreen,
+                //     arguments: 2);
+
                 Navigator.pushReplacementNamed(
-                    context, PageName.dashBoardScreen,
-                    arguments: 2);
+                    context, PageName.keyHolderHomeScreen);
               } else if (state is LoginFailed) {
                 String errMsg = state.errorMessage.toString();
                 if (errMsg == 'Email not verified') {

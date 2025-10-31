@@ -15,8 +15,8 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
         try {
           await signupRepo.signupUser(
               event.email.trim(), event.password.trim(), event.userName.trim());
-          await signupRepo.createUserDB(FirebaseAuth.instance.currentUser!.uid,
-              event.userName, event.email, event.phoneNumber);
+          // await signupRepo.createUserDB(FirebaseAuth.instance.currentUser!.uid,
+          //     event.userName, event.email, event.phoneNumber);
           emit(SignupSuccess());
         } catch (error) {
           emit(SignupFailed(error.toString()));

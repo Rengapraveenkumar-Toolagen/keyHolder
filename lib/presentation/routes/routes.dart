@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_boilerplate_project/presentation/screens/key_holder/home_screen.dart';
 
 import '../../data/model/project_details.dart';
 import '../../data/model/subtask.dart';
@@ -68,6 +69,8 @@ class AppRouter {
         var arg = settings.arguments;
         return _buildMaterialPageRoute(settings,
             UpdateSubtaskScreen(subtasks: arg is SubTasks ? arg : null));
+      case PageName.keyHolderHomeScreen:
+        return _buildMaterialPageRoute(settings, const KeyHolderHomeScreen());
       default:
         return _buildMaterialPageRoute(settings, const ErrorScreen());
     }

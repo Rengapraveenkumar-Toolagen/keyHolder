@@ -39,8 +39,9 @@ class _SplashScreenState extends State<SplashScreen> {
         isLoggedIn! &&
         isUserRegistered != null &&
         isUserRegistered!) {
-      Navigator.pushReplacementNamed(context, PageName.dashBoardScreen,
-          arguments: 2);
+      // Navigator.pushReplacementNamed(context, PageName.dashBoardScreen,
+      //     arguments: 2);
+      Navigator.pushReplacementNamed(context, PageName.keyHolderHomeScreen);
     } else if ((isLoggedIn != null && !isLoggedIn!) ||
         (isUserRegistered != null && !isUserRegistered!)) {
       Navigator.pushReplacementNamed(context, PageName.loginScreen);
