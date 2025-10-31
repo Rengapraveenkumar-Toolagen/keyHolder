@@ -1,43 +1,35 @@
-# Toolagen - Flutter boilerplate project
+# KeyHolders - A Social CPD Project
 
-## Introduction
+## Project Description
 
-A boilerplate project for flutter mobile application.
+KeyHolders is a mobile application built with Flutter that allows users to securely store and request their physical keys. The application provides a convenient way to manage and retrieve keys, drawing inspiration from popular delivery services like Amazon, Zomato, and Swiggy.
 
-## How to use
+## Features
 
-**Step 1:**
+### Screen 1: Login
+- Users can log in using their user ID and password.
+- Biometric authentication (if available on the device) for quick and secure login.
 
-Download or clone this repo by using the link below:
+### Screen 2: Home
+- Displays a list of keys the user has stored with the service.
+- A prominent red button on the bottom right to initiate a key request.
 
-```
-https://github.com/Toolagen/Flutter-Boilerplate-Project.git
-```
+### Screen 3: Key Selection
+- If the user has multiple keys, this screen allows them to select which key they want to be delivered.
+- If the user has only one key, this screen is skipped.
 
-**Step 2:**
+### Screen 4: Delivery Request
+- Shows the user's current location using the phone's GPS.
+- Option to request delivery to the current location or select a different address.
+- Users can submit or cancel the request.
+- On submission, the user is taken to the request status screen.
+- On cancellation, the user is returned to the home screen.
 
-Go to project root and execute the following command in console to get the required dependencies: 
+### Screen 5: Request Status
+- Displays the details of the raised request.
+- Upon clicking the request, a delivery code is revealed, which needs to be shared with the delivery agent to receive the key.
 
-```
-flutter pub get 
-```
+## Tech Stack
 
-**Step 3:**
-
-**For iOS only:**
-
-```
-cd ios && pod install
-```
-
-**Step 4:**
-
-To run the app on device or simulator, execute the following command.
-
-```
-flutter run -d <deviceId>
-```
-
-**Setup firebase analytics:**
-
-Follow the steps in https://codewithandrea.com/articles/flutter-firebase-multiple-flavors-flutterfire-cli/ to implement the analytics for flavors(dev and prod).
+- **Frontend:** Flutter
+- **Backend:** Simple SQL tables for data storage.
